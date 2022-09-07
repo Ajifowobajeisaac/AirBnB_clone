@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 ''' module for amenity tests '''
-from unittest
+
+import os
+import unittest
 import json
 import re
 from uuid import UUID, uuid4

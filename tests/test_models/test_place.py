@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 ''' module for place tests '''
+
+import os
 import unittest
 import json
 import re

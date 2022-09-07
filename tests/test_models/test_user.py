@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 ''' module for user tests '''
+
+import os
 import unittest
 import json
 import re

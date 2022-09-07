@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 ''' module for base_model tests '''
-from unittest import TestCase
+
+import os
+import unittest
 import json
 import re
 from uuid import UUID, uuid4
@@ -10,7 +12,7 @@ from models.base_model import BaseModel
 from models import storage
 
 
-class TestBaseModel(TestCase):
+class TestBaseModel(unittest.TestCase):
     ''' tests BaseModel class '''
     def test_3(self):
         ''' task 0 tests '''

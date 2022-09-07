@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ''' module for city tests '''
-from unittest import TestCase
+import unittest
 import json
 import re
 from uuid import UUID, uuid4
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 from models.city import City
 
 
-class TestCity(TestCase):
+class TestCity(unittest.TestCase):
     ''' tests City class '''
     def test_9(self):
         ''' task 9 tests '''
