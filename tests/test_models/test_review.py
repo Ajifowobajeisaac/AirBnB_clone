@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ''' module for review tests '''
-from unittest import TestCase
+import unittest
 import json
 import re
 from uuid import UUID, uuid4
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 from models.review import Review
 
 
-class TestCity(TestCase):
+class TestCity(unittest.TestCase):
     ''' tests Review class '''
     def test_9(self):
         ''' task 9 tests '''

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ''' module for amenity tests '''
-from unittest import TestCase
+from unittest
 import json
 import re
 from uuid import UUID, uuid4
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 from models.amenity import Amenity
 
 
-class TestAmenity(TestCase):
+class TestAmenity(unittest.TestCase):
     ''' tests Amenity class '''
     def test_9(self):
         ''' task 9 tests '''

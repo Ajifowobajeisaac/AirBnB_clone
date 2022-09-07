@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 ''' module for user tests '''
-from unittest import TestCase
+import unittest
 import json
 import re
 from uuid import UUID, uuid4
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 from models.user import User
 
 
-class TestUser(TestCase):
+class TestUser(unittest.TestCase):
     ''' tests User class '''
     def test_8(self):
         ''' task 8 tests '''
