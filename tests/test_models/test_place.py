@@ -9,9 +9,9 @@ from uuid import UUID, uuid4
 from datetime import datetime
 from time import sleep
 
+import models
 from models.base_model import BaseModel
 from models.place import Place
-
 
 class TestPlace(unittest.TestCase):
     ''' tests Place class '''

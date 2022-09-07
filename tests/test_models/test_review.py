@@ -9,6 +9,7 @@ from uuid import UUID, uuid4
 from datetime import datetime
 from time import sleep
 
+import models
 from models.base_model import BaseModel
 from models.review import Review
 

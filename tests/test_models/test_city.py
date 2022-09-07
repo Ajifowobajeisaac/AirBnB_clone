@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 ''' module for city tests '''
+
+import os
 import unittest
 import json
 import re
@@ -7,6 +9,7 @@ from uuid import UUID, uuid4
 from datetime import datetime
 from time import sleep
 
+import models
 from models.base_model import BaseModel
 from models.city import City
 
