@@ -4,7 +4,7 @@ from .base_model import BaseModel
 
 
 class State(BaseModel):
-    '''A State class 
+    '''A State class
 
     Attributes:
         name (str): The name of the state.
