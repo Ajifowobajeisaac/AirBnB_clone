@@ -1,0 +1,13 @@
+p {
+    color: #484848;
+    font-size: 14px;
+    font-family: Circular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    
+}
+
+#pic {
+    background-image: url("/images/logo.png");
+    width: 25%;
+    height: 80%;
+    display: inline-block;
+}
