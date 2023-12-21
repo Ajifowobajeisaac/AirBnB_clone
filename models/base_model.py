@@ -4,11 +4,25 @@ from datetime import datetime
 
 class BaseModel:
     """BaseModel class"""
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init method"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now().isoformat()
-        self.updated_at = datetime.now().isoformat()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    value = datetime.fromisoformat(value)
+                if key != '__class__':
+                    setattr(self, key, value)
+            if 'id' not in kwargs:
+                self.id = str(uuid.uuid4())
+            if 'created_at' not in kwargs:
+                self.created_at = datetime.now().isoformat()
+            if 'updated_at' not in kwargs:
+                self.updated_at = datetime.now().isoformat()
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now().isoformat()
+            self.updated_at = datetime.now().isoformat()
+
 
     def __str__(self):
         """str method"""
