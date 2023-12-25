@@ -63,6 +63,9 @@ class BaseModel:
           instance"""
         new_dict = self.__dict__
         new_dict["__class__"] = self.__class__.__name__
-        new_dict["created_at"] = self.created_at.isoformat()
-        new_dict["updated_at"] = self.updated_at.isoformat()
+
+        if not isinstance(self.created_at, str):
+            new_dict["created_at"] = self.created_at.isoformat()
+        if not isinstance(self.updated_at, str):
+            new_dict["updated_at"] = self.updated_at.isoformat()
         return new_dict
