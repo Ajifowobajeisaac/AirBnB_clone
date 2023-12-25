@@ -1,4 +1,11 @@
-# console.py
+#!/usr/bin/python3
+"""
+This module contains the entry point of the command interpreter.
+
+The command interpreter handles all the user input and interacts with the
+storage and model classes.
+"""
+
 import cmd
 from models import storage
 from models.base_model import BaseModel

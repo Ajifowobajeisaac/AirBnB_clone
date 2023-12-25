@@ -1,10 +1,29 @@
 #!/usr/bin/python3
+"""
+This module contains the BaseModel class, which serves as the base class for
+all your models. It contains common elements such as id, created_at, and
+updated_at attributes, and save() and to_dict() methods.
+"""
+
 import uuid
 from datetime import datetime
 import models
 
 class BaseModel:
-    """BaseModel class"""
+    """
+    BaseModel class
+
+    Attributes:
+        id (str): The unique id of the BaseModel instance.
+        created_at (datetime): The time the BaseModel instance was created.
+        updated_at (datetime): The time the BaseModel instance was last updated.
+
+    Methods:
+        __init__(*args, **kwargs): Initializes a new BaseModel instance.
+        __str__(): Returns a string representation of the BaseModel instance.
+        save(): Updates the updated_at attribute and saves the BaseModel instance.
+        to_dict(): Returns a dictionary representation of the BaseModel instance.
+    """
     def __init__(self, *args, **kwargs):
         """init method"""
         if kwargs:

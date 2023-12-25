@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+This module contains the FileStorage class, which handles the serialization
+and deserialization of all your data, to and from a JSON file.
+"""
 import json
 from models import base_model
 
