@@ -38,7 +38,8 @@ class FileStorage:
                 for o in objdict.values():
                     cls_name = o["__class__"]
                     del o["__class__"]
-                    if cls_name in ['BaseModel', 'User', 'State', 'City', 'Place']:
+                    if cls_name in ['BaseModel', 'User', 'State', 'City',
+                                     'Place']:
                         class_ = globals()[cls_name]
                         self.new(class_(**o))
         except FileNotFoundError:
