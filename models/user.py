@@ -5,6 +5,7 @@ This module contains the User class, which inherits from the BaseModel class.
 
 from .base_model import BaseModel
 
+
 class User(BaseModel):
     """
     User class inherits from BaseModel.

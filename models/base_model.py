@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 """
 This module contains the BaseModel class, which serves as the base class for
-all your models. It contains common elements such as id, created_at, and
+all models. It contains common elements such as id, created_at, and
 updated_at attributes, and save() and to_dict() methods.
 """
 
 import uuid
 from datetime import datetime
 import models
+
 
 class BaseModel:
     """
@@ -16,13 +17,16 @@ class BaseModel:
     Attributes:
         id (str): The unique id of the BaseModel instance.
         created_at (datetime): The time the BaseModel instance was created.
-        updated_at (datetime): The time the BaseModel instance was last updated.
+        updated_at (datetime): The time the BaseModel instance was last
+          updated.
 
     Methods:
         __init__(*args, **kwargs): Initializes a new BaseModel instance.
         __str__(): Returns a string representation of the BaseModel instance.
-        save(): Updates the updated_at attribute and saves the BaseModel instance.
-        to_dict(): Returns a dictionary representation of the BaseModel instance.
+        save(): Updates the updated_at attribute and saves the BaseModel
+          instance.
+        to_dict(): Returns a dictionary representation of the BaseModel
+          instance.
     """
     def __init__(self, *args, **kwargs):
         """init method"""
@@ -44,7 +48,6 @@ class BaseModel:
             self.updated_at = datetime.now()
             models.storage.new(self)
 
-
     def __str__(self):
         """str method"""
         return "[{}] ({}) {}".format(self.__class__.__name__,
@@ -56,8 +59,9 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        """Returns a dictionary containing all keys/values of __dict__ of the instance"""
-        new_dict = self.__dict__.copy()
+        """Returns a dictionary containing all keys/values of __dict__ of the
+          instance"""
+        new_dict = self.__dict__
         new_dict["__class__"] = self.__class__.__name__
         new_dict["created_at"] = self.created_at.isoformat()
         new_dict["updated_at"] = self.updated_at.isoformat()

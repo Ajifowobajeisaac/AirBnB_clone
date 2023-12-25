@@ -5,6 +5,7 @@ This module contains the State class, which inherits from the BaseModel class.
 
 from models.base_model import BaseModel
 
+
 class State(BaseModel):
     """
     State class inherits from BaseModel.
@@ -19,4 +20,5 @@ class State(BaseModel):
         self.cities = cities if cities is not None else []
 
     def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.name)
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id,
+                                      self.name)
