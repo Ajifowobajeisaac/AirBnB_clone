@@ -40,4 +40,6 @@ class FileStorage:
                         if issubclass(global_class, base_model.BaseModel):
                             self.new(global_class(**o))
         except FileNotFoundError:
-            return
+            pass
+        except json.decoder.JSONDecodeError:
+            pass
