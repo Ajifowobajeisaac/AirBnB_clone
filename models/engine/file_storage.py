@@ -4,11 +4,8 @@ This module contains the FileStorage class, which handles the serialization
 and deserialization of all your data, to and from a JSON file.
 """
 import json
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
-from models.place import Place
+from models import base_model
+
 
 class FileStorage:
     """FileStorage class for handling storage of instances"""
@@ -38,11 +35,11 @@ class FileStorage:
                 for o in objdict.values():
                     cls_name = o["__class__"]
                     del o["__class__"]
-                    if cls_name in ['BaseModel', 'User', 'State', 'City',
-                                     'Place']:
-                        class_ = globals()[cls_name]
-                        self.new(class_(**o))
+                    if cls_name in globals():
+                        global_class = globals()[cls_name]
+                        if issubclass(global_class, base_model.BaseModel):
+                            self.new(global_class(**o))
         except FileNotFoundError:
-            print("File not found.")
+            print("File not found")
         except json.decoder.JSONDecodeError:
-            print("Error decoding JSON.")
+            print("File is not valid JSON")
