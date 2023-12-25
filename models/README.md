@@ -1,40 +1,43 @@
-# AirBnB Clone
+# Model Module
 
-This project is a clone of the popular vacation rental platform, AirBnB. It aims to replicate some of the core functionalities of the original platform.
+This module contains the implementation of various models used in the AirBnB clone project.
 
-## Table of Contents
+## Base Model
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+The `BaseModel` class serves as the base class for all other models in the project.
+ It provides common attributes and methods that are inherited by other models.
+  Some of the key features of the `BaseModel` class include:
 
-## Installation
+- `id`: A unique identifier for each instance of a model.
+- `created_at`: The date and time when an instance is created.
+- `updated_at`: The date and time when an instance is last updated.
+- `to_dict()`: A method that converts an instance to a dictionary representation.
 
-To install and set up the project, follow these steps:
+## City
 
-1. Clone the repository: `git clone https://github.com/your-username/airbnb-clone.git`
-2. Navigate to the project directory: `cd airbnb-clone`
-3. Install the dependencies: `npm install`
+The `City` class represents a city in the AirBnB clone project. It inherits from
+ the `BaseModel` class and adds additional attributes specific to a city,
+  such as the city name and state.
 
-## Usage
+## Place
 
-To use the project, follow these instructions:
+The `Place` class represents a place or accommodation in the AirBnB clone project.
+ It also inherits from the `BaseModel` class and includes attributes such as the
+  place name, description, price, and number of rooms.
 
-1. Start the development server: `npm start`
-2. Open your web browser and navigate to `http://localhost:3000`
-3. Explore the different features and functionalities of the AirBnB clone
+## State
 
-## Contributing
+The `State` class represents a state in the AirBnB clone project.
+ It inherits from the `BaseModel` class and includes attributes such as the state name.
 
-We welcome contributions from the community. To contribute to the project, please follow these guidelines:
+## User
 
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Make your changes and commit them: `git commit -m "Add your commit message"`
-4. Push your changes to your forked repository: `git push origin feature/your-feature-name`
-5. Open a pull request to the main repository
+The `User` class represents a user in the AirBnB clone project.
+ It inherits from the `BaseModel` class and includes attributes such as the user's email and password.
 
-## License
+## Engine Module
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for more details.
+The `engine` module contains the file storage implementation for the AirBnB clone project.
+ It includes classes and methods for storing and retrieving data from files.
+ The key class in this module is the `FileStorage` class, which provides methods
+ for serializing and deserializing objects to and from JSON format.
