@@ -10,12 +10,11 @@ from models.state import State
 from models.city import City
 from models.place import Place
 
+
 class FileStorage:
     """FileStorage class for handling storage of instances"""
     __file_path = "file.json"
     __objects = {}
-    __class_map = {'BaseModel': BaseModel, 'User': User, 'State': State,
-                    'City': City, 'Place': Place}
 
     def all(self):
         """Returns the dictionary __objects"""
@@ -38,13 +37,13 @@ class FileStorage:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
                 for o in objdict.values():
-                    cls_name = o.pop("__class__", None)
-                    if cls_name in FileStorage.__class_map:
-                        class_ = FileStorage.__class_map[cls_name]
-                        self.new(class_(o))
-
+                    cls_name = o["__class__"]
+                    del o["__class__"]
+                    if cls_name in ['BaseModel', 'User', 'State', 'City',
+                                    'Place']:
+                        class_ = globals()[cls_name]
+                        self.new(class_(**o))
         except FileNotFoundError:
             print("File not found.")
         except json.decoder.JSONDecodeError:
             print("Error decoding JSON.")
-
