@@ -29,7 +29,13 @@ class BaseModel:
           instance.
     """
     def __init__(self, *args, **kwargs):
-        """init method"""
+        """Initializes a new BaseModel instance
+        
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+        """
+
         if kwargs:
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
@@ -49,12 +55,19 @@ class BaseModel:
             models.storage.new(self)
 
     def __str__(self):
-        """str method"""
+        """str method
+        
+        Returns:
+            str: A string representation of the BaseModel instance.
+        """
         return "[{}] ({}) {}".format(self.__class__.__name__,
                                      self.id, self.__dict__)
 
     def save(self):
-        """save method"""
+        """save method
+        
+        Updates the updated_at attribute and saves the BaseModel instance.
+        """
         self.updated_at = datetime.now()
         models.storage.save()
 

@@ -1,14 +1,17 @@
 # AirBnB Clone Project
 
-This project is a simplified clone of the popular vacation rental platform, AirBnB.
+This project is a simplified clone of the popular vacation rental platform,
+AirBnB.
 It aims to replicate some of the core functionalities of the original platform.
 
 ## Project Structure
 
-The project is structured into several directories and files, each with a specific purpose:
+The project is structured into several directories and files, each with
+ a specific purpose:
 
-- `models`: This directory contains all the classes (or "models") used throughout
- the project. Each class represents an object or instance in the project.
+- `models`: This directory contains all the classes (or "models") used
+ throughout the project. 
+ Each class represents an object or instance in the project.
  For example, a User class might represent a user in the system.
 
 - `models/base_model.py`: This is the base class for all our models. It contains 
