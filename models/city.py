@@ -15,10 +15,5 @@ class City(BaseModel):
         name (str): The name of the city.
         state_id (str): The id of the state the city belongs to.
     """
-    def __init__(self, name, state_id):
-        super().__init__()
-        self.name = name
-        self.state_id = state_id
-
-    def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.name)
+    name = ""
+    state_id = ""
