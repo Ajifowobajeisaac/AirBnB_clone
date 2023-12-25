@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import json
-from models.base_model import BaseModel
+from models import base_model
 
 # models/engine/file_storage.py
 class FileStorage:
@@ -8,30 +8,33 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    @staticmethod
-    def all():
+
+    def all(self):
         """Returns the dictionary __objects"""
         return FileStorage.__objects
 
-    @staticmethod
-    def new(obj):
+
+    def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
         key = obj.__class__.__name__ + "." + obj.id
         FileStorage.__objects[key] = obj
 
-    @staticmethod
-    def save():
+
+    def save(self):
         """Serializes __objects to the JSON file (path: __file_path)"""
         with open(FileStorage.__file_path, 'w') as f:
             json.dump({k: v.to_dict() for k, v in FileStorage.__objects.items()}, f)
 
-    @staticmethod
-    def reload():
-        """Deserializes the JSON file to __objects"""
+    
+    def reload(self):
+        """Deserialize the JSON file __file_path to __objects, if it exists."""
         try:
-            with open(FileStorage.__file_path, 'r') as f:
-                objs = json.load(f)
-            for key, value in objs.items():
-                FileStorage.__objects[key] = BaseModel.from_dict(value)
+            with open(FileStorage.__file_path) as f:
+                objdict = json.load(f)
+                for o in objdict.values():
+                    cls_name = o["__class__"]
+                    del o["__class__"]
+                    if cls_name in globals() and issubclass(globals()[cls_name], base_model.BaseModel):
+                        self.new(globals()[cls_name](**o))
         except FileNotFoundError:
-            pass
+            return
