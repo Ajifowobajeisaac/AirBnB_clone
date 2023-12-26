@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
             elif args[0] not in self.classes:
                 print("** class doesn't exist **")
             else:
-                new_instance = self.classes[args[0]](*args[1:])
+                new_instance = self.classes[args[0]]()
                 new_instance.save()
                 print(new_instance.id)
         except Exception as e:
