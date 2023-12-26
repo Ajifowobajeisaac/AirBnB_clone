@@ -20,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     classes = {"BaseModel": BaseModel, "User": User, "State": State,
                "City": City, "Place": Place}
-
+    
     def handle_exception(*args):
         if isinstance(args, KeyError):
             print(f"Error: '{args}' is not a valid class name")
@@ -44,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
                 print(new_instance.id)
         except Exception as e:
             self.handle_exception(e)
-
+            
     def do_show(self, args):
         """Prints the string representation of an instance based on the class
          name and id"""
@@ -95,10 +95,8 @@ class HBNBCommand(cmd.Cmd):
             if len(args) > 0 and args[0] not in self.classes:
                 print("** class doesn't exist **")
             else:
-                print(
-                    [str(v) for k, v in storage.all().items() if not
-                        args or k.split('.')[0] == args[0]]
-                    )
+                print([str(v) for k, v in storage.all().items()
+                        if not args or k.split('.')[0] == args[0]])
         except Exception as e:
             self.handle_exception(e)
 
@@ -138,7 +136,6 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """An empty line + ENTER shouldn’t execute anything"""
         pass
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
