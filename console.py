@@ -20,6 +20,36 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     __classes = {"BaseModel": BaseModel, "User": User, "State": State,
                "City": City, "Place": Place}
+    
+    def do_count(self, args):
+        """Retrieves the number of instances of a class"""
+        try:
+            args = args.split()
+            if len(args) == 0:
+                print("** class name missing **")
+            elif args[0] not in self.__classes:
+                print("** class doesn't exist **")
+            else:
+                print(len([v for k, v in storage.all().items() if
+                           k.split('.')[0] == args[0]]))
+        except Exception as e:
+            pass
+
+    def do_all(self, args):
+        """Prints all string representation of all instances based or not on
+        the class name"""
+
+        try:
+            args = args.split()
+            if len(args) > 0 and args[0] not in self.__classes:
+                print("** class doesn't exist **")
+            else:
+                print(
+                    [str(v) for k, v in storage.all().items() if not
+                        args or k.split('.')[0] == args[0]]
+                    )
+        except Exception as e:
+            pass
 
 
     def do_create(self, args):
