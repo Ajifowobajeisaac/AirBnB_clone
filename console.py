@@ -18,9 +18,13 @@ from models.place import Place
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand class for the command interpreter"""
     prompt = '(hbnb) '
-    __classes = {"BaseModel": BaseModel, "User": User, "State": State,
-               "City": City, "Place": Place}
-
+    __classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Place": Place
+        }
 
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it (to the JSON file) and
@@ -57,7 +61,6 @@ class HBNBCommand(cmd.Cmd):
                     print(storage.all()[key])
         except Exception as e:
             pass
-
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id (save the change
@@ -129,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
                         else:
                             print("** attribute type not allowed **")
         except Exception as e:
-           pass
+            pass
 
     def do_quit(self, args):
         """Quit command to exit the program"""
