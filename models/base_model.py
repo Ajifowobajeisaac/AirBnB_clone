@@ -30,7 +30,6 @@ class BaseModel:
     """
     def __init__(self, *args, **kwargs):
         """Initializes a new BaseModel instance
-        
         Args:
             *args: unused
             **kwargs: Arbitrary keyword arguments.
@@ -56,8 +55,7 @@ class BaseModel:
             models.storage.new(self)
 
     def __str__(self):
-        """str method
-        
+        """str method -
         Returns:
             str: A string representation of the BaseModel instance.
         """
@@ -65,8 +63,7 @@ class BaseModel:
                                      self.id, self.__dict__)
 
     def save(self):
-        """save method
-        
+        """save method -
         Updates the updated_at attribute and saves the BaseModel instance.
         """
         self.updated_at = datetime.now()
