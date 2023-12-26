@@ -18,16 +18,9 @@ from models.place import Place
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand class for the command interpreter"""
     prompt = '(hbnb) '
-    classes = {"BaseModel": BaseModel, "User": User, "State": State,
+    __classes = {"BaseModel": BaseModel, "User": User, "State": State,
                "City": City, "Place": Place}
 
-    def handle_exception(*args):
-        if isinstance(args, KeyError):
-            print(f"Error: '{args}' is not a valid class name")
-        elif isinstance(args, AttributeError):
-            print(f"Error: '{args}' attribute does not exist")
-        else:
-            print(f"Unexpected error: {args}")
 
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it (to the JSON file) and
@@ -36,14 +29,14 @@ class HBNBCommand(cmd.Cmd):
             args = args.split()
             if len(args) == 0:
                 print("** class name missing **")
-            elif args[0] not in self.classes:
+            elif args[0] not in self.__classes:
                 print("** class doesn't exist **")
             else:
-                new_instance = self.classes[args[0]]()
+                new_instance = self.__classes[args[0]]()
                 new_instance.save()
                 print(new_instance.id)
         except Exception as e:
-            self.handle_exception(e)
+            pass
 
     def do_show(self, args):
         """Prints the string representation of an instance based on the class
@@ -52,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
             args = args.split()
             if len(args) == 0:
                 print("** class name missing **")
-            elif args[0] not in self.classes:
+            elif args[0] not in self.__classes:
                 print("** class doesn't exist **")
             elif len(args) == 1:
                 print("** instance id missing **")
@@ -63,7 +56,8 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     print(storage.all()[key])
         except Exception as e:
-            self.handle_exception(e)
+            pass
+
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id (save the change
@@ -72,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
             args = args.split()
             if len(args) == 0:
                 print("** class name missing **")
-            elif args[0] not in self.classes:
+            elif args[0] not in self.__classes:
                 print("** class doesn't exist **")
             elif len(args) == 1:
                 print("** instance id missing **")
@@ -84,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
                     del storage.all()[key]
                     storage.save()
         except Exception as e:
-            self.handle_exception(e)
+            pass
 
     def do_all(self, args):
         """Prints all string representation of all instances based or not on
@@ -92,7 +86,7 @@ class HBNBCommand(cmd.Cmd):
 
         try:
             args = args.split()
-            if len(args) > 0 and args[0] not in self.classes:
+            if len(args) > 0 and args[0] not in self.__classes:
                 print("** class doesn't exist **")
             else:
                 print(
@@ -100,7 +94,7 @@ class HBNBCommand(cmd.Cmd):
                         args or k.split('.')[0] == args[0]]
                     )
         except Exception as e:
-            self.handle_exception(e)
+            pass
 
     def do_update(self, args):
         """Updates an instance based on the class name and id by
@@ -109,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
             args = args.split()
             if len(args) == 0:
                 print("** class name missing **")
-            elif args[0] not in self.classes:
+            elif args[0] not in self.__classes:
                 print("** class doesn't exist **")
             elif len(args) == 1:
                 print("** instance id missing **")
@@ -135,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
                         else:
                             print("** attribute type not allowed **")
         except Exception as e:
-            self.handle_exception(e)
+           pass
 
     def do_quit(self, args):
         """Quit command to exit the program"""
