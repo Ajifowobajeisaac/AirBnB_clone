@@ -122,8 +122,18 @@ class HBNBCommand(cmd.Cmd):
                 elif len(args) == 3:
                     print("** value missing **")
                 else:
-                    setattr(storage.all()[key], args[2], args[3])
-                    storage.all()[key].save()
+                    if args[2] in ['id', 'created_at', 'updated_at']:
+                        print("** attribute can't be updated **")
+                    else:
+                        attr_type = type(
+                            getattr(storage.all()[key], args[2], ""))
+                        if attr_type in [int, float, str]:
+                            setattr(
+                                storage.all()[key], args[2], attr_type(args[3])
+                                )
+                            storage.all()[key].save()
+                        else:
+                            print("** attribute type not allowed **")
         except Exception as e:
             self.handle_exception(e)
 
