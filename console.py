@@ -20,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     classes = {"BaseModel": BaseModel, "User": User, "State": State,
                "City": City, "Place": Place}
-    
+
     def handle_exception(*args):
         if isinstance(args, KeyError):
             print(f"Error: '{args}' is not a valid class name")
@@ -39,12 +39,12 @@ class HBNBCommand(cmd.Cmd):
             elif args[0] not in self.classes:
                 print("** class doesn't exist **")
             else:
-                new_instance = self.classes[args[0]](*args[1:])
+                new_instance = self.classes[args[0]]()
                 new_instance.save()
                 print(new_instance.id)
         except Exception as e:
             self.handle_exception(e)
-            
+
     def do_show(self, args):
         """Prints the string representation of an instance based on the class
          name and id"""
@@ -95,8 +95,10 @@ class HBNBCommand(cmd.Cmd):
             if len(args) > 0 and args[0] not in self.classes:
                 print("** class doesn't exist **")
             else:
-                print([str(v) for k, v in storage.all().items()
-                        if not args or k.split('.')[0] == args[0]])
+                print(
+                    [str(v) for k, v in storage.all().items() if not
+                        args or k.split('.')[0] == args[0]]
+                    )
         except Exception as e:
             self.handle_exception(e)
 
@@ -120,8 +122,18 @@ class HBNBCommand(cmd.Cmd):
                 elif len(args) == 3:
                     print("** value missing **")
                 else:
-                    setattr(storage.all()[key], args[2], args[3])
-                    storage.all()[key].save()
+                    if args[2] in ['id', 'created_at', 'updated_at']:
+                        print("** attribute can't be updated **")
+                    else:
+                        attr_type = type(
+                            getattr(storage.all()[key], args[2], ""))
+                        if attr_type in [int, float, str]:
+                            setattr(
+                                storage.all()[key], args[2], attr_type(args[3])
+                                )
+                            storage.all()[key].save()
+                        else:
+                            print("** attribute type not allowed **")
         except Exception as e:
             self.handle_exception(e)
 
@@ -136,6 +148,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """An empty line + ENTER shouldn’t execute anything"""
         pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
