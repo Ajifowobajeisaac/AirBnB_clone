@@ -84,8 +84,9 @@ class TestBaseModel(unittest.TestCase):
 
     def test_save(self):
         b = BaseModel()
+        old_updated_at = b.updated_at
         b.save()
-        self.assertNotEqual(b.created_at, b.updated_at)
+        self.assertNotEqual(old_updated_at, b.updated_at)
 
     def test_to_dict(self):
         b = BaseModel()
