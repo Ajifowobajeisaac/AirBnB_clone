@@ -12,9 +12,9 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 
+
 class FileStorage:
     """FileStorage class for handling storage of instances
-    
     Attributes:
         __file_path (str): The path to the JSON file.
         __objects (dict): A dictionary of instantiated objects.
@@ -41,7 +41,8 @@ class FileStorage:
     def reload(self):
         """Deserialize the JSON file __file_path to __objects, if it exists."""
         class_dict = {"BaseModel": base_model.BaseModel, "User": User,
-                      "State": State, "City": City, "Place": Place}
+                      "State": State, "City": City, "Place": Place,
+                      "Amenity": Amenity, "Review": Review}
         try:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
@@ -56,4 +57,3 @@ class FileStorage:
             print("File not found")
         except json.decoder.JSONDecodeError:
             print("File is not valid JSON")
-
