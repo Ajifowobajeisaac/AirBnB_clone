@@ -52,6 +52,4 @@ class FileStorage:
                     if cls_name in class_dict:    
                         self.new(class_dict[cls_name](**o))
         except FileNotFoundError:
-            print("File not found")
-        except json.decoder.JSONDecodeError:
-            print("File is not valid JSON")
+            return
