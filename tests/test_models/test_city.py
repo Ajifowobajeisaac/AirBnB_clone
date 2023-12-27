@@ -2,7 +2,6 @@
 
 import unittest
 from models.city import City
-from models.base_model import BaseModel
 from datetime import datetime
 from time import sleep
 
@@ -83,11 +82,27 @@ class TestCity(unittest.TestCase):
         self.assertEqual(c.created_at, dt)
         self.assertEqual(c.updated_at, dt)
 
-    def test_inheritance(self):
-        """
-        Test that City inherits from BaseModel.
-        """
-        self.assertTrue(issubclass(City, BaseModel))
+    def test_save_method(self):
+        c = City()
+        old_updated_at = c.updated_at
+        c.save()
+        self.assertNotEqual(old_updated_at, c.updated_at)
+        with open("file.json", "r") as f:
+            self.assertIn("City." + c.id, f.read())
+
+    def test_to_dict(self):
+        c = City()
+        c_dict = c.to_dict()
+        self.assertEqual(dict, type(c_dict))
+        self.assertIn('__class__', c_dict)
+        self.assertEqual('City', c_dict['__class__'])
+        self.assertIn('id', c_dict)
+        self.assertEqual(str, type(c_dict['id']))
+        self.assertIn('created_at', c_dict)
+        self.assertEqual(str, type(c_dict['created_at']))
+        self.assertIn('updated_at', c_dict)
+        self.assertEqual(str, type(c_dict['updated_at']))
+
 
 if __name__ == '__main__':
     unittest.main()
