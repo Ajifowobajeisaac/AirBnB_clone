@@ -67,9 +67,8 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save_method(self):
         b = BaseModel()
-        old_updated_at = b.updated_at
-        b.save()
-        self.assertNotEqual(old_updated_at, b.updated_at)
+        self.storage.new(b)
+        self.storage.save()
         with open("file.json", "r") as f:
             self.assertIn("BaseModel." + b.id, f.read())
 
