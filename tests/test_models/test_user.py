@@ -38,6 +38,18 @@ class TestUser(unittest.TestCase):
         u2 = User()
         self.assertNotEqual(u1.id, u2.id)
 
+    def test_email(self):
+        self.assertEqual(str, type(User().email))
+
+    def test_password(self):
+        self.assertEqual(str, type(User().password))
+
+    def test_first_name(self):
+        self.assertEqual(str, type(User().first_name))
+
+    def test_last_name(self):
+        self.assertEqual(str, type(User().last_name))
+
     def test_two_users_different_created_at(self):
         u1 = User()
         sleep(0.05)
