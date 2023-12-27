@@ -2,10 +2,8 @@
 
 import unittest
 from models.place import Place
-from models.base_model import BaseModel
 from datetime import datetime
 from time import sleep
-
 
 class TestPlace(unittest.TestCase):
     """Unittests for testing instantiation of the Place class."""
@@ -83,12 +81,26 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(p.created_at, dt)
         self.assertEqual(p.updated_at, dt)
 
-    def test_inheritance(self):
-        """
-        Test that Place inherits from BaseModel.
-        """
-        self.assertTrue(issubclass(Place, BaseModel))
+    def test_save_method(self):
+        p = Place()
+        old_updated_at = p.updated_at
+        p.save()
+        self.assertNotEqual(old_updated_at, p.updated_at)
+        with open("file.json", "r") as f:
+            self.assertIn("Place." + p.id, f.read())
 
+    def test_to_dict(self):
+        p = Place()
+        p_dict = p.to_dict()
+        self.assertEqual(dict, type(p_dict))
+        self.assertIn('__class__', p_dict)
+        self.assertEqual('Place', p_dict['__class__'])
+        self.assertIn('id', p_dict)
+        self.assertEqual(str, type(p_dict['id']))
+        self.assertIn('created_at', p_dict)
+        self.assertEqual(str, type(p_dict['created_at']))
+        self.assertIn('updated_at', p_dict)
+        self.assertEqual(str, type(p_dict['updated_at']))
 
 if __name__ == '__main__':
     unittest.main()
