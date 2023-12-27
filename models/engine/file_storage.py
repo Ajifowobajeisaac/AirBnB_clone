@@ -5,6 +5,7 @@ and deserialization of all your data, to and from a JSON file.
 """
 import json
 from models import base_model
+from models.base_model import BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
