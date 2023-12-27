@@ -7,6 +7,7 @@ storage and model classes.
 """
 
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -61,15 +62,76 @@ class HBNBCommand(cmd.Cmd):
             pass
 
     def default(self, line):
-        """Method called on an input line when the command prefix is not recognized"""
+        """
+        Method called on an input line when the command prefix is not
+        recognized
+        """
+
+        match = re.search(r"^(\w+)\.(\w+)\((.*)\)$", line)
+        if match:
+            class_name = match.group(1)
+            method_name = match.group(2)
+            args = match.group(3)
+            if class_name in self.__classes:
+                if method_name == "all":
+                    self.do_all(class_name)
+                elif method_name == "count":
+                    self.do_count(class_name)
+                elif method_name == "show":
+                    self.do_show(class_name + " " + args)
+                elif method_name == "destroy":
+                    self.do_destroy(class_name + " " + args)
+                elif method_name == "update":
+                     # Use regex to match either a sequence of non-space characters or a sequence of characters within double quotes
+                    args = re.findall(r'[^,\s]+|"[^"]*"', args)
+                    # Remove quotes from arguments
+                    args = [arg.replace('"', '') for arg in args]
+                    # Call do_update with the correctly parsed arguments
+                    if len(args) == 3:
+                        self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
+                    elif len(args) == 2:
+                        self.do_update(f"{class_name} {args[0]} {args[1]}")
+                    else:
+                        print("** wrong number of arguments **")
         if line.endswith(".all()"):
             class_name = line.split(".")[0]
             if class_name in self.__classes:
                 self.do_all(class_name)
             else:
                 print("** class doesn't exist **")
-        else:
-            print("*** Unknown syntax: {}".format(line))        
+        elif line.endswith(".count()"):
+            class_name = line.split(".")[0]
+            if class_name in self.__classes:
+                self.do_count(class_name)
+            else:
+                print("** class doesn't exist **")
+        elif line.endswith("show(<id>)"):
+            class_name = line.split("(")[0]
+            if class_name in self.__classes:
+                self.do_show(class_name + " " + line.split('"')[1])
+            else:
+                print("** class doesn't exist **")
+        elif line.endswith("destroy(<id>)"):
+            class_name = line.split("(")[0]
+            if class_name in self.__classes:
+                self.do_destroy(class_name + " " + line.split('"')[1])
+            else:
+                print("** class doesn't exist **")
+        elif line.endswith("update(<id>, <attribute name>, <attribute value>)"):
+            class_name = line.split("(")[0]
+            if class_name in self.__classes:
+                args = line.split('"')
+                self.do_update(class_name + " " + args[1] + ", " + args[3] +
+                               ", " + args[5])
+            else:
+                print("** class doesn't exist **")
+        elif line.endswith("update(<id>, <dictionary representation>)"):
+            class_name = line.split("(")[0]
+            if class_name in self.__classes:
+                args = line.split('"')
+                self.do_update(class_name + " " + args[1] + ", " + args[3])
+            else:
+                print("** class doesn't exist **")
 
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it (to the JSON file) and
