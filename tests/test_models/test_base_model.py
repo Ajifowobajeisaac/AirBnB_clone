@@ -82,6 +82,29 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(b.created_at, dt)
         self.assertEqual(b.updated_at, dt)
 
+    def test_save(self):
+        b = BaseModel()
+        b.save()
+        self.assertNotEqual(b.created_at, b.updated_at)
+
+    def test_to_dict(self):
+        b = BaseModel()
+        b_dict = b.to_dict()
+        self.assertEqual(dict, type(b_dict))
+        self.assertIn('__class__', b_dict)
+        self.assertEqual('BaseModel', b_dict['__class__'])
+        self.assertIn('id', b_dict)
+        self.assertEqual(str, type(b_dict['id']))
+        self.assertIn('created_at', b_dict)
+        self.assertEqual(str, type(b_dict['created_at']))
+        self.assertIn('updated_at', b_dict)
+        self.assertEqual(str, type(b_dict['updated_at']))
+
+if __name__ == '__main__':
+    unittest.main()
+
+    
+
 
 if __name__ == '__main__':
     unittest.main()
