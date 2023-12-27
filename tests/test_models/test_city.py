@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import unittest
+import os
+from models import storage
 from models.city import City
 from datetime import datetime
 from time import sleep
@@ -32,6 +34,13 @@ class TestCity(unittest.TestCase):
 
     def test_updated_at_is_public_datetime(self):
         self.assertEqual(datetime, type(City().updated_at))
+
+    def test_city_storage(self):
+        city = City()
+        storage.new(city)
+        storage.save()
+        stored_cities = storage.all(City)
+        self.assertIn(city, stored_cities.values())
 
     def test_two_cities_unique_ids(self):
         c1 = City()
