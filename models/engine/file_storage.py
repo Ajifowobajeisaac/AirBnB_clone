@@ -5,12 +5,12 @@ and deserialization of all your data, to and from a JSON file.
 """
 import json
 from models import base_model
-from models.base_model import BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
 from models.place import Place
-
+from models.amenity import Amenity
+from models.review import Review
 
 class FileStorage:
     """FileStorage class for handling storage of instances"""
@@ -23,7 +23,7 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = obj.__class__.__name__ + "." + obj.id
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -34,13 +34,18 @@ class FileStorage:
 
     def reload(self):
         """Deserialize the JSON file __file_path to __objects, if it exists."""
+        class_dict = {"BaseModel": base_model.BaseModel, "User": User,
+                      "State": State, "City": City, "Place": Place}
         try:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
                 for o in objdict.values():
                     cls_name = o["__class__"]
                     del o["__class__"]
-                    self.new(eval(cls_name)(**o))                     
+                    if cls_name in class_dict:
+                        if issubclass(
+                                class_dict[cls_name], base_model.BaseModel):
+                            self.new(class_dict[cls_name](**o))
         except FileNotFoundError:
             print("File not found")
         except json.decoder.JSONDecodeError:
