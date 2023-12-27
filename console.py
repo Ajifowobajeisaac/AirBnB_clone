@@ -60,6 +60,17 @@ class HBNBCommand(cmd.Cmd):
         except Exception as e:
             pass
 
+    def default(self, line):
+        """Method called on an input line when the command prefix is not recognized"""
+        if line.endswith(".all()"):
+            class_name = line.split(".")[0]
+            if class_name in self.__classes:
+                self.do_all(class_name)
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("*** Unknown syntax: {}".format(line))        
+
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it (to the JSON file) and
          prints the id"""
@@ -114,20 +125,6 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     del storage.all()[key]
                     storage.save()
-        except Exception as e:
-            pass
-
-    def do_all(self, args):
-        """Prints all string representations of instances based on the class name"""
-        try:
-            args = args.split()
-            if len(args) == 0:
-                print("** class name missing **")
-            elif args[0] not in self.__classes:
-                print("** class doesn't exist **")
-            else:
-                instances = storage.all()[args[0]].values()
-                print([str(instance) for instance in instances])
         except Exception as e:
             pass
 
