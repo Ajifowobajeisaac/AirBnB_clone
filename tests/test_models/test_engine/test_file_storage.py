@@ -1,27 +1,57 @@
 #!/usr/bin/python3
-from models import storage
+
+import unittest
+import os
+from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
-from models.user import User
 
-all_objs = storage.all()
-print("-- Reloaded objects --")
-for obj_id in all_objs.keys():
-    obj = all_objs[obj_id]
-    print(obj)
 
-print("-- Create a new User --")
-my_user = User()
-my_user.first_name = "Betty"
-my_user.last_name = "Bar"
-my_user.email = "airbnb@mail.com"
-my_user.password = "root"
-my_user.save()
-print(my_user)
+class TestFileStorage(unittest.TestCase):
+    """Unittests for testing instantiation of the FileStorage class."""
 
-print("-- Create a new User 2 --")
-my_user2 = User()
-my_user2.first_name = "John"
-my_user2.email = "airbnb2@mail.com"
-my_user2.password = "root"
-my_user2.save()
-print(my_user2)
+    def setUp(self):
+        """
+        Set up for the tests.
+        """
+        self.storage = FileStorage()
+
+    def tearDown(self):
+        """
+        Clean up after the tests.
+        """
+        del self.storage
+
+    def test_no_args_instantiates(self):
+        self.assertEqual(FileStorage, type(FileStorage()))
+
+    def test_new_method(self):
+        b = BaseModel()
+        self.storage.new(b)
+        self.assertIn("BaseModel." + b.id, self.storage.all().keys())
+
+    def test_all_method(self):
+        self.assertEqual(dict, type(self.storage.all()))
+
+    def test_save_method(self):
+        b = BaseModel()
+        self.storage.new(b)
+        self.storage.save()
+        with open("file.json", "r") as f:
+            self.assertIn("BaseModel." + b.id, f.read())
+
+    def test_reload_method(self):
+        b = BaseModel()
+        self.storage.new(b)
+        self.storage.save()
+        self.storage.reload()
+        self.assertIn("BaseModel." + b.id, self.storage.all().keys())
+
+    def test_file_path_is_private_str(self):
+        self.assertEqual(str, type(self.storage._FileStorage__file_path))
+
+    def test_objects_is_private_dict(self):
+        self.assertEqual(dict, type(self.storage._FileStorage__objects))
+
+
+if __name__ == '__main__':
+    unittest.main()

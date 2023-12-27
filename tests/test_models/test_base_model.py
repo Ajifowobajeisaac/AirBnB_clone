@@ -2,56 +2,86 @@
 
 import unittest
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
-from models.review import Review
 from datetime import datetime
-import os
-import json
+from time import sleep
 
-class TestReview(unittest.TestCase):
-    """Test the Review class"""
+
+class TestBaseModel(unittest.TestCase):
+    """Unittests for testing instantiation of the BaseModel class."""
 
     def setUp(self):
-        """Sets up test methods."""
-        self.review = Review()
-        self.review.save()
+        """
+        Set up for the tests.
+        """
+        self.base = BaseModel()
 
     def tearDown(self):
-        """Tears down test methods."""
-        try:
-            os.remove("file.json")
-        except:
-            pass
+        """
+        Clean up after the tests.
+        """
+        del self.base
 
-    def test_docstring(self):
-        """Check for docstrings"""
-        self.assertIsNotNone(Review.__doc__)
+    def test_no_args_instantiates(self):
+        self.assertEqual(BaseModel, type(BaseModel()))
 
-    def test_attributes(self):
-        """Check if instance of BaseModel successfully made"""
-        self.assertTrue(hasattr(self.review, "place_id"))
-        self.assertTrue(hasattr(self.review, "user_id"))
-        self.assertTrue(hasattr(self.review, "text"))
+    def test_id_is_public_str(self):
+        self.assertEqual(str, type(BaseModel().id))
 
-    def test_subclass(self):
-        """Check if instance of BaseModel successfully made"""
-        self.assertTrue(issubclass(self.review.__class__, BaseModel), True)
+    def test_created_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(BaseModel().created_at))
 
-    def test_attribute_type(self):
-        """Check attribute type"""
-        self.assertEqual(type(self.review.place_id), str)
-        self.assertEqual(type(self.review.user_id), str)
-        self.assertEqual(type(self.review.text), str)
+    def test_updated_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(BaseModel().updated_at))
 
-    def test_save(self):
-        """Check save method"""
-        self.review.save()
-        self.assertNotEqual(self.review.created_at, self.review.updated_at)
+    def test_two_bases_unique_ids(self):
+        b1 = BaseModel()
+        b2 = BaseModel()
+        self.assertNotEqual(b1.id, b2.id)
 
-    def test_to_dict(self):
-        """Check to_dict method"""
-        self.assertEqual("to_dict" in dir(self.review), True)
+    def test_two_bases_different_created_at(self):
+        b1 = BaseModel()
+        sleep(0.05)
+        b2 = BaseModel()
+        self.assertLess(b1.created_at, b2.created_at)
 
-    
-if __name__ == "__main__":
+    def test_two_bases_different_updated_at(self):
+        b1 = BaseModel()
+        sleep(0.05)
+        b2 = BaseModel()
+        self.assertLess(b1.updated_at, b2.updated_at)
+
+    def test_str_representation(self):
+        dt = datetime.today()
+        dt_repr = repr(dt)
+        b = BaseModel()
+        b.id = "123456"
+        b.created_at = b.updated_at = dt
+        bstr = b.__str__()
+        self.assertIn("[BaseModel] (123456)", bstr)
+        self.assertIn("'id': '123456'", bstr)
+        self.assertIn("'created_at': " + dt_repr, bstr)
+        self.assertIn("'updated_at': " + dt_repr, bstr)
+
+    def test_instantiation_with_kwargs(self):
+        dt = datetime.today()
+        dt_iso = dt.isoformat()
+        b = BaseModel(id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(b.id, "345")
+        self.assertEqual(b.created_at, dt)
+        self.assertEqual(b.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            BaseModel(id=None, created_at=None, updated_at=None)
+
+    def test_instantiation_with_args_and_kwargs(self):
+        dt = datetime.today()
+        dt_iso = dt.isoformat()
+        b = BaseModel("12", id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(b.id, "345")
+        self.assertEqual(b.created_at, dt)
+        self.assertEqual(b.updated_at, dt)
+
+
+if __name__ == '__main__':
     unittest.main()

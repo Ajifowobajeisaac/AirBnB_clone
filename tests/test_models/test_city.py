@@ -1,10 +1,14 @@
 #!/usr/bin/python3
+
 import unittest
 from models.city import City
 from models.base_model import BaseModel
 from datetime import datetime
+from time import sleep
+
 
 class TestCity(unittest.TestCase):
+    """Unittests for testing instantiation of the City class."""
 
     def setUp(self):
         """
@@ -18,38 +22,72 @@ class TestCity(unittest.TestCase):
         """
         del self.city
 
-    def test_instance_type(self):
-        """
-        Test that the created instance is of type City.
-        """
-        self.assertTrue(isinstance(self.city, City))
+    def test_no_args_instantiates(self):
+        self.assertEqual(City, type(City()))
+
+    def test_id_is_public_str(self):
+        self.assertEqual(str, type(City().id))
+
+    def test_created_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(City().created_at))
+
+    def test_updated_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(City().updated_at))
+
+    def test_two_cities_unique_ids(self):
+        c1 = City()
+        c2 = City()
+        self.assertNotEqual(c1.id, c2.id)
+
+    def test_two_cities_different_created_at(self):
+        c1 = City()
+        sleep(0.05)
+        c2 = City()
+        self.assertLess(c1.created_at, c2.created_at)
+
+    def test_two_cities_different_updated_at(self):
+        c1 = City()
+        sleep(0.05)
+        c2 = City()
+        self.assertLess(c1.updated_at, c2.updated_at)
+
+    def test_str_representation(self):
+        dt = datetime.today()
+        dt_repr = repr(dt)
+        c = City()
+        c.id = "123456"
+        c.created_at = c.updated_at = dt
+        cstr = c.__str__()
+        self.assertIn("[City] (123456)", cstr)
+        self.assertIn("'id': '123456'", cstr)
+        self.assertIn("'created_at': " + dt_repr, cstr)
+        self.assertIn("'updated_at': " + dt_repr, cstr)
+
+    def test_instantiation_with_kwargs(self):
+        dt = datetime.today()
+        dt_iso = dt.isoformat()
+        c = City(id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(c.id, "345")
+        self.assertEqual(c.created_at, dt)
+        self.assertEqual(c.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            City(id=None, created_at=None, updated_at=None)
+
+    def test_instantiation_with_args_and_kwargs(self):
+        dt = datetime.today()
+        dt_iso = dt.isoformat()
+        c = City("12", id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(c.id, "345")
+        self.assertEqual(c.created_at, dt)
+        self.assertEqual(c.updated_at, dt)
 
     def test_inheritance(self):
         """
         Test that City inherits from BaseModel.
         """
         self.assertTrue(issubclass(City, BaseModel))
-
-    def test_id(self):
-        """
-        Test that the city has an id.
-        """
-        self.assertEqual(type(self.city.id), str)
-
-    def test_created_at(self):
-        """
-        Test that the city has a created_at attribute.
-        """
-        self.assertTrue(hasattr(self.city, "created_at"))
-        self.assertEqual(type(self.city.created_at), datetime)
-
-    def test_updated_at(self):
-        """
-        Test that the city has an updated_at attribute.
-        """
-        self.assertTrue(hasattr(self.city, "updated_at"))
-        self.assertEqual(type(self.city.updated_at), datetime)
-
 
 if __name__ == '__main__':
     unittest.main()
