@@ -52,4 +52,4 @@ class FileStorage:
                     if cls_name in class_dict:    
                         self.new(class_dict[cls_name](**o))
         except FileNotFoundError:
-            return
+            print("File not found")
