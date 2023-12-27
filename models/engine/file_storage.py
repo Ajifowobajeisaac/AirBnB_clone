@@ -33,18 +33,13 @@ class FileStorage:
 
     def reload(self):
         """Deserialize the JSON file __file_path to __objects, if it exists."""
-        class_dict = {"BaseModel": base_model.BaseModel, "User": User,
-                      "State": State, "City": City, "Place": Place}
         try:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
                 for o in objdict.values():
                     cls_name = o["__class__"]
                     del o["__class__"]
-                    if cls_name in class_dict:
-                        if issubclass(
-                                class_dict[cls_name], base_model.BaseModel):
-                            self.new(class_dict[cls_name](**o))
+                    self.new(eval(cls_name)(**o))                        
         except FileNotFoundError:
             print("File not found")
         except json.decoder.JSONDecodeError:
