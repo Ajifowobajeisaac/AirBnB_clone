@@ -52,6 +52,33 @@ class TestFileStorage(unittest.TestCase):
     def test_objects_is_private_dict(self):
         self.assertEqual(dict, type(self.storage._FileStorage__objects))
 
+    def test_file_path_attribute(self):
+            self.assertEqual(str, type(self.storage._FileStorage__file_path))
+            self.assertEqual("file.json", self.storage._FileStorage__file_path)
+
+    def test_objects_attribute(self):
+        self.assertEqual(dict, type(self.storage._FileStorage__objects))
+        self.assertEqual({}, self.storage._FileStorage__objects)
+    
+    def test_new_method(self):
+        b = BaseModel()
+        self.storage.new(b)
+        self.assertIn("BaseModel." + b.id, self.storage.all().keys())
+
+    def test_save_method(self):
+        b = BaseModel()
+        self.storage.new(b)
+        self.storage.save()
+        with open("file.json", "r") as f:
+            self.assertIn("BaseModel." + b.id, f.read())
+
+    def test_reload_method(self):
+        b = BaseModel()
+        self.storage.new(b)
+        self.storage.save()
+        self.storage.reload()
+        self.assertIn("BaseModel." + b.id, self.storage.all().keys())
+
 
 if __name__ == '__main__':
     unittest.main()
