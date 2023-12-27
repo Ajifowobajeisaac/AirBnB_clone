@@ -13,7 +13,12 @@ from models.amenity import Amenity
 from models.review import Review
 
 class FileStorage:
-    """FileStorage class for handling storage of instances"""
+    """FileStorage class for handling storage of instances
+    
+    Attributes:
+        __file_path (str): The path to the JSON file.
+        __objects (dict): A dictionary of instantiated objects.
+    """
     __file_path = "file.json"
     __objects = {}
 
@@ -23,7 +28,7 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        key = obj.__class__.__name__ + "." + obj.id
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -48,5 +53,8 @@ class FileStorage:
                             self.new(class_dict[cls_name](**o))
         except FileNotFoundError:
             print("File not found")
+            return
         except json.decoder.JSONDecodeError:
             print("File is not valid JSON")
+            return
+
