@@ -33,10 +33,9 @@ class FileStorage:
 
     def save(self):
         """Serializes __objects to the JSON file (path: __file_path)"""
-        odict = FileStorage.__objects
-        objdict = {obj: odict[obj].to_dict() for obj in odict.keys()}
-        with open(FileStorage.__file_path, "w") as f:
-            json.dump(objdict, f)
+        with open(FileStorage.__file_path, 'w') as f:
+            json.dump({k: v.to_dict() for k, v in
+                       FileStorage.__objects.items()}, f)
 
     def reload(self):
         """Deserialize the JSON file __file_path to __objects, if it exists."""
@@ -52,4 +51,4 @@ class FileStorage:
                     if cls_name in class_dict:    
                         self.new(class_dict[cls_name](**o))
         except FileNotFoundError:
-            print("File not found")
+            return
