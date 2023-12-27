@@ -40,7 +40,7 @@ class FileStorage:
                 for o in objdict.values():
                     cls_name = o["__class__"]
                     del o["__class__"]
-                    self.new(eval(cls_name)(**o))                        
+                    self.new(eval(cls_name)(**o))                     
         except FileNotFoundError:
             print("File not found")
         except json.decoder.JSONDecodeError:
