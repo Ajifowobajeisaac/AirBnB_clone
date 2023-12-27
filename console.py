@@ -90,7 +90,11 @@ class HBNBCommand(cmd.Cmd):
                     if len(args) == 3:
                         self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
                     elif len(args) == 2:
-                         self.do_update(f"{class_name} {args[0]} {args[1]}")
+                        if isinstance(args[1], dict):
+                            for key, value in args[1].items():
+                                self.do_update(f"{class_name} {args[0]} {key} {value}")
+                        else:
+                            self.do_update(f"{class_name} {args[0]} {args[1]}")
                     else:
                         print("** wrong number of arguments **")
                         
