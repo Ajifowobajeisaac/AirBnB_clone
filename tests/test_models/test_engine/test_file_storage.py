@@ -72,12 +72,13 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             self.assertIn("BaseModel." + b.id, f.read())
 
-    def test_reload_method(self):
+    def test_save_method(self):
         b = BaseModel()
-        self.storage.new(b)
-        self.storage.save()
-        self.storage.reload()
-        self.assertIn("BaseModel." + b.id, self.storage.all().keys())
+        old_updated_at = b.updated_at
+        b.save()
+        self.assertNotEqual(old_updated_at, b.updated_at)
+        with open("file.json", "r") as f:
+            self.assertIn("BaseModel." + b.id, f.read())
 
 
 if __name__ == '__main__':
