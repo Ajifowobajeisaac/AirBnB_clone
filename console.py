@@ -82,32 +82,19 @@ class HBNBCommand(cmd.Cmd):
                 elif method_name == "destroy":
                     self.do_destroy(class_name + " " + args)
                 elif method_name == "update":
-                     # Use regex to match either a sequence of non-space 
-                     # characters or a sequence of characters within
-                     # double quotes
+                     # Use regex to match either a sequence of non-space characters or a sequence of characters within double quotes
                     args = re.findall(r'[^,\s]+|"[^"]*"', args)
                     # Remove quotes from arguments
                     args = [arg.replace('"', '') for arg in args]
                     # Call do_update with the correctly parsed arguments
                     if len(args) == 3:
-                        self.do_update(
-                            f"{class_name} {args[0]} {args[1]} {args[2]}")
+                        self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
                     elif len(args) == 2:
-                    # Check if the second argument is a dictionary
-                        try:
-                            attributes = eval(args[1])
-                            if isinstance(attributes, dict):
-                                for key, value in attributes.items():
-                                    self.do_update(
-                                        f"{class_name} {args[0]} {key} {value}"
-                                        )
-                            else:
-                                print("** attribute must be a dictionary **")
-                        except:
-                            print("** value mustbe a dictionary **")
+                         self.do_update(f"{class_name} {args[0]} {args[1]}")
                     else:
-                        print("** invalid number of arguments **")
-
+                        print("** wrong number of arguments **")
+                        
+                          
         if line.endswith(".all()"):
             class_name = line.split(".")[0]
             if class_name in self.__classes:
