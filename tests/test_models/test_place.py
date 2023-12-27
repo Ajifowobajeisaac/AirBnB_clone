@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import unittest
+from models import storage
 from models.place import Place
 from datetime import datetime
 from time import sleep
@@ -31,6 +32,16 @@ class TestPlace(unittest.TestCase):
 
     def test_updated_at_is_public_datetime(self):
         self.assertEqual(datetime, type(Place().updated_at))
+
+    def test_place_storage(self):
+        """
+        Test that a Place instance is correctly stored.
+        """
+        p = Place()
+        storage.new(p)
+        storage.save()
+        stored_places = storage.all(Place)
+        self.assertIn(p, stored_places.values())
 
     def test_two_places_unique_ids(self):
         p1 = Place()

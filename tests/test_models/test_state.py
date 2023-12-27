@@ -2,6 +2,7 @@
 
 import unittest
 from models.state import State
+from models import storage
 from models.base_model import BaseModel
 from datetime import datetime
 from time import sleep
@@ -33,6 +34,16 @@ class TestState(unittest.TestCase):
 
     def test_updated_at_is_public_datetime(self):
         self.assertEqual(datetime, type(State().updated_at))
+
+    def test_state_storage(self):
+        """
+        Test that a State instance is correctly stored.
+        """
+        s = State()
+        storage.new(s)
+        storage.save()
+        stored_states = storage.all(State)
+        self.assertIn(s, stored_states.values())
 
     def test_two_states_unique_ids(self):
         s1 = State()
