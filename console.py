@@ -31,7 +31,7 @@ class HBNBCommand(cmd.Cmd):
         "Amenity": Amenity,
         "Review": Review,
         }
-    
+
     def default(self, line):
         """
         Method called on an input line when the command prefix is not
@@ -59,28 +59,38 @@ class HBNBCommand(cmd.Cmd):
                         dict_arg = dict_arg_match.group(0)
                         # Extract the rest of the arguments
                         remaining_args = args.replace(dict_arg, '').split(',')
-                        remaining_args = [arg.strip() for arg in remaining_args if arg.strip()]
+                        remaining_args = [arg.strip() for arg in remaining_args
+                                          if arg.strip()]
                         id_arg = remaining_args[0].strip('"')
                         self.do_update(f"{class_name} {id_arg} {dict_arg}")
                     else:
-                         # Use regex to match either a sequence of non-space characters or a sequence of characters within double quotes                     
+                        # Use regex to match either a sequence of non-space
+                        # characters or a sequence of characters
+                        # within double quotes
                         args = re.findall(r'[^,\s]+|"[^"]*"', args)
                         # Remove quotes from arguments
                         args = [arg.replace('"', '') for arg in args]
                         # Call do_update with the correctly parsed arguments
                         if len(args) == 3:
-                            self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
+                            self.do_update(
+                                f"{class_name} {args[0]} {args[1]} {args[2]}")
                         elif len(args) == 2:
                             if isinstance(args[1], dict):
                                 for key, value in args[1].items():
-                                    self.do_update(f"{class_name} {args[0]} {key} {value}")
+                                    self.do_update(
+                                        f"""
+                                        {class_name}
+                                        {args[0]}
+                                        {key}
+                                        {value}
+                                        """)
                             else:
-                                self.do_update(f"{class_name} {args[0]} {args[1]}")
+                                self.do_update(
+                                    f"{class_name} {args[0]} {args[1]}")
                         else:
                             print("** wrong number of arguments **")
         else:
             print("*** Unknown syntax: {}".format(line))
- 
 
     def do_count(self, args):
         """Retrieves the number of instances of a class"""
@@ -188,15 +198,19 @@ class HBNBCommand(cmd.Cmd):
                     print("** attribute name missing **")
                 else:
                     if args[2].startswith('{') and args[2].endswith('}'):
-                    # Handle dictionary argument
+                        # Handle dictionary argument
                         update_dict = ast.literal_eval(args[2])
                     for attr_name, value in update_dict.items():
                         if attr_name in ['id', 'created_at', 'updated_at']:
                             print("** attribute can't be updated **")
                         else:
-                            attr_type = type(getattr(storage.all()[key], attr_name, ""))
+                            attr_type = type(
+                                getattr(storage.all()[key], attr_name, ""))
                             if attr_type in [int, float, str]:
-                                setattr(storage.all()[key], attr_name, attr_type(value))
+                                setattr(
+                                    storage.all()[key],
+                                    attr_name,
+                                    attr_type(value))
                                 storage.all()[key].save()
                             else:
                                 print("** attribute type not allowed **")
