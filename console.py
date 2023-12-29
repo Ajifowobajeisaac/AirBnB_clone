@@ -16,6 +16,7 @@ from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
+import ast
 
 
 class HBNBCommand(cmd.Cmd):
@@ -30,6 +31,56 @@ class HBNBCommand(cmd.Cmd):
         "Amenity": Amenity,
         "Review": Review,
         }
+    
+    def default(self, line):
+        """
+        Method called on an input line when the command prefix is not
+        recognized
+        """
+
+        match = re.search(r"^(\w+)\.(\w+)\((.*)\)$", line)
+        if match:
+            class_name = match.group(1)
+            method_name = match.group(2)
+            args = match.group(3)
+            if class_name in self.__classes:
+                if method_name == "all":
+                    self.do_all(class_name)
+                elif method_name == "count":
+                    self.do_count(class_name)
+                elif method_name == "show":
+                    self.do_show(class_name + " " + args)
+                elif method_name == "destroy":
+                    self.do_destroy(class_name + " " + args)
+                elif method_name == "update":
+                    dict_arg_match = re.search(r"{.*}", args)
+                    if dict_arg_match:
+                        # Process dictionary argument
+                        dict_arg = dict_arg_match.group(0)
+                        # Extract the rest of the arguments
+                        remaining_args = args.replace(dict_arg, '').split(',')
+                        remaining_args = [arg.strip() for arg in remaining_args if arg.strip()]
+                        id_arg = remaining_args[0].strip('"')
+                        self.do_update(f"{class_name} {id_arg} {dict_arg}")
+                    else:
+                         # Use regex to match either a sequence of non-space characters or a sequence of characters within double quotes                     
+                        args = re.findall(r'[^,\s]+|"[^"]*"', args)
+                        # Remove quotes from arguments
+                        args = [arg.replace('"', '') for arg in args]
+                        # Call do_update with the correctly parsed arguments
+                        if len(args) == 3:
+                            self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
+                        elif len(args) == 2:
+                            if isinstance(args[1], dict):
+                                for key, value in args[1].items():
+                                    self.do_update(f"{class_name} {args[0]} {key} {value}")
+                            else:
+                                self.do_update(f"{class_name} {args[0]} {args[1]}")
+                        else:
+                            print("** wrong number of arguments **")
+        else:
+            print("*** Unknown syntax: {}".format(line))
+ 
 
     def do_count(self, args):
         """Retrieves the number of instances of a class"""
@@ -60,84 +111,6 @@ class HBNBCommand(cmd.Cmd):
                     )
         except Exception as e:
             pass
-
-    def default(self, line):
-        """
-        Method called on an input line when the command prefix is not
-        recognized
-        """
-
-        match = re.search(r"^(\w+)\.(\w+)\((.*)\)$", line)
-        if match:
-            class_name = match.group(1)
-            method_name = match.group(2)
-            args = match.group(3)
-            if class_name in self.__classes:
-                if method_name == "all":
-                    self.do_all(class_name)
-                elif method_name == "count":
-                    self.do_count(class_name)
-                elif method_name == "show":
-                    self.do_show(class_name + " " + args)
-                elif method_name == "destroy":
-                    self.do_destroy(class_name + " " + args)
-                elif method_name == "update":
-                     # Use regex to match either a sequence of non-space characters or a sequence of characters within double quotes
-                    args = re.findall(r'[^,\s]+|"[^"]*"', args)
-                    # Remove quotes from arguments
-                    args = [arg.replace('"', '') for arg in args]
-                    # Call do_update with the correctly parsed arguments
-                    if len(args) == 3:
-                        self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
-                    elif len(args) == 2:
-                        if isinstance(args[1], dict):
-                            for key, value in args[1].items():
-                                self.do_update(f"{class_name} {args[0]} {key} {value}")
-                        else:
-                            self.do_update(f"{class_name} {args[0]} {args[1]}")
-                    else:
-                        print("** wrong number of arguments **")
-                        
-                          
-        if line.endswith(".all()"):
-            class_name = line.split(".")[0]
-            if class_name in self.__classes:
-                self.do_all(class_name)
-            else:
-                print("** class doesn't exist **")
-        elif line.endswith(".count()"):
-            class_name = line.split(".")[0]
-            if class_name in self.__classes:
-                self.do_count(class_name)
-            else:
-                print("** class doesn't exist **")
-        elif line.endswith("show(<id>)"):
-            class_name = line.split("(")[0]
-            if class_name in self.__classes:
-                self.do_show(class_name + " " + line.split('"')[1])
-            else:
-                print("** class doesn't exist **")
-        elif line.endswith("destroy(<id>)"):
-            class_name = line.split("(")[0]
-            if class_name in self.__classes:
-                self.do_destroy(class_name + " " + line.split('"')[1])
-            else:
-                print("** class doesn't exist **")
-        elif line.endswith("update(<id>, <attribute name>, <attribute value>)"):
-            class_name = line.split("(")[0]
-            if class_name in self.__classes:
-                args = line.split('"')
-                self.do_update(class_name + " " + args[1] + ", " + args[3] +
-                               ", " + args[5])
-            else:
-                print("** class doesn't exist **")
-        elif line.endswith("update(<id>, <dictionary representation>)"):
-            class_name = line.split("(")[0]
-            if class_name in self.__classes:
-                args = line.split('"')
-                self.do_update(class_name + " " + args[1] + ", " + args[3])
-            else:
-                print("** class doesn't exist **")
 
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it (to the JSON file) and
@@ -200,7 +173,7 @@ class HBNBCommand(cmd.Cmd):
         """Updates an instance based on the class name and id by
           adding or updating attribute (save the change into the JSON file)"""
         try:
-            args = args.split()
+            args = re.split(r'\s(?![^{}]*\})', args)
             if len(args) == 0:
                 print("** class name missing **")
             elif args[0] not in self.__classes:
@@ -213,9 +186,20 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
                 elif len(args) == 2:
                     print("** attribute name missing **")
-                elif len(args) == 3:
-                    print("** value missing **")
                 else:
+                    if args[2].startswith('{') and args[2].endswith('}'):
+                    # Handle dictionary argument
+                        update_dict = ast.literal_eval(args[2])
+                    for attr_name, value in update_dict.items():
+                        if attr_name in ['id', 'created_at', 'updated_at']:
+                            print("** attribute can't be updated **")
+                        else:
+                            attr_type = type(getattr(storage.all()[key], attr_name, ""))
+                            if attr_type in [int, float, str]:
+                                setattr(storage.all()[key], attr_name, attr_type(value))
+                                storage.all()[key].save()
+                            else:
+                                print("** attribute type not allowed **")
                     if args[2] in ['id', 'created_at', 'updated_at']:
                         print("** attribute can't be updated **")
                     else:
