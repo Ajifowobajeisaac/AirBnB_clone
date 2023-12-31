@@ -3,6 +3,7 @@
     justify-content: center;
     border: 3px;
     border-radius: 10px;
+    border-color: #DDDDDD;
 }
 
 .locations .amenities {
