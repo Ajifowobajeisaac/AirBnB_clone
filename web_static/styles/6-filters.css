@@ -1,0 +1,128 @@
+.filters {
+    display: flex;
+    justify-content: left;
+    box-sizing: border-box;
+    border-radius: 0px;
+    align-items: center;
+    padding: 0px;
+    height: 70px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+}
+
+
+.locations {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    position: relative;
+    border-right: 1px solid #DDD;;
+    padding: 0px 40px;
+    height: 100%;
+    width: 25%;
+}
+
+.amenities {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    position: relative;
+    padding: 0 20px;
+    height: 100%;
+    width: 25%;
+}
+
+.locations:hover .popover,
+.amenities:hover .popover {
+    display:list-item;
+}
+
+.popover {
+    position: absolute; /* positioned relative to .locations/.amenities */
+    top: 75%; /* positioned just below .locations/.amenities */
+    left: 0; /* align with the left edge of .locations/.amenities */
+    width: 100%; /* same width as .locations/.amenities */
+    background-color: #FAFAFA; /* background color */
+    border: 1px solid #DDD; /* border */
+    border-radius: 2px; /* border radius */
+    list-style: none; /* remove bullet points */
+    padding-left: 30px; /* align text with .locations/.amenities */
+    box-sizing: border-box; /* include padding and border in element's total width */
+    display: none; /* hidden by default */
+    text-align: left;
+}
+
+.location_popover ul {
+    /* margin: 6px 20px; */
+    padding: 2px 25px;
+    list-style-type: none;
+}
+
+.location_popover li {
+    margin: 0px;
+    padding: 1px 0px;
+    font-weight: 100;
+    color: rgb(93, 93, 93);
+}
+
+.location_popover {
+    padding: 10px 0px;
+}
+
+.amenities_popover {
+    padding: 25px 0px;
+}
+
+.amenities_popover li {
+    padding: 2px 0px;
+    font-weight: 100;
+    color: rgb(93, 93, 93);
+}
+
+.state {
+    margin: 15px 0px;
+    padding: 0px;
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0px;
+    padding: 0px;
+}
+
+h3 {
+    font-weight: 600;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+h4 {
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+}
+
+button {
+    background-color: #FF5A5F;
+    color: #FFFFFF;
+    font-size: 18px;
+    height: 48px;
+    width: 25%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    right: 20px;
+}
+
+button:hover {
+    opacity: 90%;
+}
